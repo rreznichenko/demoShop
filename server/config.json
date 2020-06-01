@@ -1,0 +1,13 @@
+{
+  "db": {
+    "host": "localhost",
+    "port": 2424,
+    "tableName": "demoShop",
+    "username": "root",
+    "password": "235387qqQQ@@"
+  },
+  "adminPanel": {
+     "login": "admin",
+     "password": "admin"
+  }
+}

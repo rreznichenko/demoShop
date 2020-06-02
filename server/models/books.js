@@ -13,20 +13,25 @@ const books = {
     },
     createBook(data) {
         return db().then(session => {
-            const Book = session.class.get('BOOK');
-            Book.create({...data});
+            session.class.get('BOOK').then(Book => {
+                Book.create({...data});
+            });
         })
     },
     updateBook(id, data) {
         return db().then(session => {
             this.getBook(id).then(book => {
-                console.log(book)
                 const updatedBook = {
                     ...book,
-                    ...data
+                    ...data,
                 }
                 session.record.update(updatedBook);
             })
+        })
+    },
+    deleteBook(id) {
+        return db().then(session => {
+            session.record.delete(id)
         })
     }
 }

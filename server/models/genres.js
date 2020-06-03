@@ -3,12 +3,12 @@ const db = require('../services/dbConnection');
 const genres = {
     getAllGenres() {
         return db().then(session => {
-            return session.class.get('GENRE');
+            return session.class.get('GENRE').catch(err => {});
         })
     },
     getGenre(id) {
         return db().then(session => {
-            return session.record.get(id);
+            return session.record.get(id).catch(err => {});
         });
     },
     createGenre(data) {

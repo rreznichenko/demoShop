@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node index",
     "serve": "nodemon index",
+    "init": "node ./services/dbInit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

@@ -1,39 +1,39 @@
 const db = require('../services/dbConnection');
 
-const authors = {
-    getAllAuthors() {
+const users = {
+    getAllUsers() {
         return db().then(session => {
-            return session.class.get('AUTHOR').catch(err => {});
+            return session.class.get('USERS').catch(err => {});
         })
     },
-    getAuthor(id) {
+    getUser(id) {
         return db().then(session => {
             return session.record.get(id).catch(err => {});
         });
     },
-    createAuthor(data) {
+    createUser(data) {
         return db().then(session => {
-            session.class.get('AUTHOR').then(Author => {
-                Author.create({...data});
+            session.class.get('USERS').then(User => {
+                User.create({...data});
             });
         })
     },
-    updateAuthor(id, data) {
+    updateUser(id, data) {
         return db().then(session => {
-            this.getAuthor(id).then(Author => {
-                const updatedAuthor = {
-                    ...Author,
+            this.getUser(id).then(User => {
+                const updatedUser = {
+                    ...User,
                     ...data
                 }
-                session.record.update(updatedAuthor);
+                session.record.update(updatedUser);
             })
         })
     },
-    deleteAuthor(id) {
+    deleteUser(id) {
         return db().then(session => {
             session.record.delete(id)
         })
     }
 }
 
-module.exports = authors;
+module.exports = users;

@@ -13,9 +13,12 @@ function router(req, res) {
     const controller = controllers[controllerName];
     if(!controller) {
         res.send('404');
+        return;
     }
     const action = controller[method + controllerName];
-    action(req, res, pathArgs);   
+    if(action) {
+        action(req, res, pathArgs);   
+    }
 }
 
 module.exports = router;

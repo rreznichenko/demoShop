@@ -1,0 +1,50 @@
+version: '3.2'
+services:
+  migration: 
+    image: node:12
+    restart: on-failure
+    command: npm run init
+    volumes:
+      - ./:/app
+    working_dir: /app
+    depends_on:
+      - orientdb
+    links:
+      - orientdb
+    env_file:
+      - .env
+    ports:
+      - 8081:3001
+  app:
+    image: node:12
+    restart: on-failure
+    volumes:
+      - ./:/app
+    working_dir: /app
+    user: node
+    depends_on:
+      - migration
+    links:
+      - orientdb
+    ports:
+      - 8080:3000
+    command: npm run start
+    env_file:
+      - .env
+  orientdb:
+    image: orientdb:latest
+    ports:
+      - "2424:2424"
+      - "2480:2480"
+    volumes:
+      - orient_db_config:/opt/orientdb/config
+      - orient_db_database:/opt/orientdb/databases
+      - orient_db_backup:/opt/orientdb/backup
+    environment: 
+      - ORIENTDB_ROOT_PASSWORD=test
+volumes:
+  orient_db_config: {}
+  orient_db_database: {}
+  orient_db_backup: {}
+
+  

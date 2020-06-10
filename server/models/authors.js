@@ -13,8 +13,10 @@ const authors = {
     },
     createAuthor(data) {
         return db().then(session => {
-            session.class.get('AUTHOR').then(Author => {
-                Author.create({...data});
+            return session.class.get('AUTHOR').then(Author => {
+                return Author.create({...data})
+            }).catch(err => { 
+                process.exit(1)
             });
         })
     },

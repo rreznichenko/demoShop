@@ -13,8 +13,10 @@ const genres = {
     },
     createGenre(data) {
         return db().then(session => {
-            session.class.get('GENRE').then(Genre => {
-                Genre.create({...data});
+            return session.class.get('GENRE').then(Genre => {
+                return Genre.create({...data})
+            }).catch(err => { 
+                process.exit(1)
             });
         })
     },

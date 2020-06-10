@@ -1,7 +1,7 @@
 const server = require("orientjs");
 const orientDBClient = server.OrientDBClient;
 
-const config = require("../config.json");
+const config = require("../config");
 
 function connectDb() {
   return orientDBClient

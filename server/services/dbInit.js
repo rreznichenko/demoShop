@@ -1,172 +1,193 @@
 const server = require("orientjs");
 const orientDBClient = server.OrientDBClient;
-const config = require("../config.json");
+const config = require("../config");
 
 // CREATE BOOK
-
-orientDBClient
-  .connect({
-    host: config.db.host,
-    port: config.db.port,
+server({
+  host: config.db.host,
+  port: config.db.port,
+  username: config.db.username,
+  password: config.db.password,
+  useToken: true,
+}).create({
+  name:    'demoShop',
+  type:    'graph',
+  storage: 'plocal'
   })
-  .then((client) => {
-    client
-      .session({
-        name: config.db.tableName,
-        username: config.db.username,
-        password: config.db.password,
-      })
-      .then((session) => {
-        // use the session
-        session
-          .command("CREATE CLASS BOOK EXTENDS V")
-          .all()
-          .then((result) => {
-            session.command("CREATE PROPERTY BOOK.name STRING");
-            session.command("CREATE PROPERTY BOOK.description STRING");
-            session.command("CREATE PROPERTY BOOK.shortDesc STRING");
-            session
-              .command("CREATE PROPERTY BOOK.price STRING")
-              .all()
-              .then((result) => {
-                return session.close().then(() => {
-                  client.close();
+  .then((create) => {
+    console.log('Created Database:', create.name);
+    orientDBClient
+    .connect({
+      host: config.db.host,
+      port: config.db.port,
+    })
+    .then((client) => {
+      client
+        .session({
+          name: config.db.tableName,
+          username: config.db.username,
+          password: config.db.password,
+        })
+        .then((session) => {
+          // use the session
+          session
+            .command("CREATE CLASS BOOK EXTENDS V")
+            .all()
+            .then((result) => {
+              session.command("CREATE PROPERTY BOOK.name STRING");
+              session.command("CREATE PROPERTY BOOK.description STRING");
+              session.command("CREATE PROPERTY BOOK.shortDesc STRING");
+              session
+                .command("CREATE PROPERTY BOOK.price STRING")
+                .all()
+                .then((result) => {
+                  return session.close().then(() => {
+                    client.close();
+                  });
                 });
-              });
-          });
-      });
-  })
-  .then(() => {
-    console.log("Books created");
-  });
-
-// CREATE Genre
-
-orientDBClient
-  .connect({
-    host: config.db.host,
-    port: config.db.port,
-  })
-  .then((client) => {
-    client
-      .session({
-        name: config.db.tableName,
-        username: config.db.username,
-        password: config.db.password,
-      })
-      .then((session) => {
-        // use the session
-        session
-          .command("CREATE CLASS GENRE EXTENDS V")
-          .all()
-          .then((result) => {
-            session
-              .command("CREATE PROPERTY GENRE.name STRING")
-              .all()
-              .then((result) => {
-                return session.close().then(() => {
-                  client.close();
-                });
-              });
-          });
-      });
-  })
-  .then(() => {
-    console.log("genre created");
-  });
-
-orientDBClient
-  .connect({
-    host: config.db.host,
-    port: config.db.port,
-  })
-  .then((client) => {
-    client
-      .session({
-        name: config.db.tableName,
-        username: config.db.username,
-        password: config.db.password,
-      })
-      .then((session) => {
-        // use the session
-        session
-          .command("CREATE CLASS AUTHOR EXTENDS V")
-          .all()
-          .then((result) => {
-            session
-              .command("CREATE PROPERTY AUTHOR.name STRING")
-              .all()
-              .then((result) => {
-                return session.close().then(() => {
-                  client.close();
-                });
-              });
-          });
-      });
-  })
-  .then(() => {
-    console.log("author created");
-  });
-
-orientDBClient
-  .connect({
-    host: config.db.host,
-    port: config.db.port,
-  })
-  .then((client) => {
-    client
-      .session({
-        name: config.db.tableName,
-        username: config.db.username,
-        password: config.db.password,
-      })
-      .then((session) => {
-        // use the session
-        session
-          .command("CREATE CLASS USERS EXTENDS V")
-          .all()
-          .then((result) => {
-            session.command("CREATE PROPERTY USERS.name STRING");
-            session
-              .command("CREATE PROPERTY USERS.password STRING")
-              .all()
-              .then((result) => {
-                return session.close().then(() => {
-                  client.close();
-                });
-              });
-          });
-      });
-  })
-  .then(() => {
-    console.log("users created");
-  });
-
-orientDBClient
-  .connect({
-    host: config.db.host,
-    port: config.db.port,
-  })
-  .then((client) => {
-    client.session({
-      name: config.db.tableName,
-      username: config.db.username,
-      password: config.db.password,
-    }).then((session) => {
-      session.class
-        .create("BookAuthor", "E")
-        .then((player) => console.log("BookAuthor Created"));
-      session.class
-        .create("BookGenres", "E")
-        .then((result) => {
-          console.log("BookGenres Created")
-          return session.close().then(() => {
-            console.log("finished");
-            client.close();
-          });
+            });
         });
+    })
+    .then(() => {
+      console.log("Books created");
     });
+  
+  // CREATE Genre
+  
+  orientDBClient
+    .connect({
+      host: config.db.host,
+      port: config.db.port,
+    })
+    .then((client) => {
+      client
+        .session({
+          name: config.db.tableName,
+          username: config.db.username,
+          password: config.db.password,
+        })
+        .then((session) => {
+          // use the session
+          session
+            .command("CREATE CLASS GENRE EXTENDS V")
+            .all()
+            .then((result) => {
+              session
+                .command("CREATE PROPERTY GENRE.name STRING")
+                .all()
+                .then((result) => {
+                  return session.close().then(() => {
+                    client.close();
+                  });
+                });
+            });
+        });
+    })
+    .then(() => {
+      console.log("genre created");
+    });
+  
+  orientDBClient
+    .connect({
+      host: config.db.host,
+      port: config.db.port,
+    })
+    .then((client) => {
+      client
+        .session({
+          name: config.db.tableName,
+          username: config.db.username,
+          password: config.db.password,
+        })
+        .then((session) => {
+          // use the session
+          session
+            .command("CREATE CLASS AUTHOR EXTENDS V")
+            .all()
+            .then((result) => {
+              session
+                .command("CREATE PROPERTY AUTHOR.name STRING")
+                .all()
+                .then((result) => {
+                  return session.close().then(() => {
+                    client.close();
+                  });
+                });
+            });
+        });
+    })
+    .then(() => {
+      console.log("author created");
+    });
+  
+  orientDBClient
+    .connect({
+      host: config.db.host,
+      port: config.db.port,
+    })
+    .then((client) => {
+      client
+        .session({
+          name: config.db.tableName,
+          username: config.db.username,
+          password: config.db.password,
+        })
+        .then((session) => {
+          // use the session
+          session
+            .command("CREATE CLASS USERS EXTENDS V")
+            .all()
+            .then((result) => {
+              session.command("CREATE PROPERTY USERS.name STRING");
+              session
+                .command("CREATE PROPERTY USERS.password STRING")
+                .all()
+                .then((result) => {
+                  return session.close().then(() => {
+                    client.close();
+                  });
+                });
+            });
+        });
+    })
+    .then(() => {
+      console.log("users created");
+    });
+  
+  orientDBClient
+    .connect({
+      host: config.db.host,
+      port: config.db.port,
+    })
+    .then((client) => {
+      client.session({
+        name: config.db.tableName,
+        username: config.db.username,
+        password: config.db.password,
+      }).then((session) => {
+        session.class
+          .create("BookAuthor", "E")
+          .then((player) => console.log("BookAuthor Created"));
+        session.class
+          .create("BookGenres", "E")
+          .then((result) => {
+            console.log("BookGenres Created")
+            return session.close().then(() => {
+              console.log("finished db setup");
+              client.close();
+            });
+          });
+      });
+    })
+    
   })
+  .catch(err => {
+    
+    console.log("trying to reconnect...");
+    process.exit(1);
+  })
+
+
   
 
 // orientDBClient.connect({
